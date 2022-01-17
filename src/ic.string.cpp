@@ -6,10 +6,11 @@
 #include "utf8.h"
 
 namespace IC {
-	String::String(wchar_t *ca) : String(ca, wcslen(ca)) {}
 	String::String(char c): String(wchar_t(c)) {}
-	String::String(const wchar_t* cca) : String((wchar_t*)cca) {}
 	String::String(char *ca) : String(ca, strlen(ca)) {}
+	String::String(wchar_t *ca) : String(ca, wcslen(ca)) {}
+	String::String(const char *ca) : String((char *)ca, strlen(ca)) {}
+	String::String(const wchar_t* cca) : String((wchar_t*)cca) {}
 	void String::add(char c) { return add(wchar_t(c)); }
 	void String::add(char* ca) { return add(ca, strlen(ca)); }
 	void String::add(wchar_t* ca) { return add(ca, wcslen(ca)); }
@@ -187,7 +188,7 @@ namespace IC {
 		if(len >= siz) resize_(siz + 1 + block);
 		wmemcpy(buff + pos + 1, buff + pos, len - pos);
 		buff[pos] = c;
-		buff[len++] = 0;
+		buff[++len] = 0;
 #ifndef NO_IC_STR_UTF8_CACHE
 		buff_mod = true;
 #endif
@@ -267,8 +268,8 @@ namespace IC {
 		size_t a = len, b = 0, c = 0;
 		while(1) {
 			b += c = utf8towcs(ca + b, buff, siz, &a, replace, leng - b);
+			if(b >= leng) break;
 			if(!c) {
-				if(b >= leng) break;
 				if((siz - a) > block)
 					break; // unknown error
 				resize_(siz + block);
@@ -358,8 +359,8 @@ namespace IC {
 #endif
 			while (1) {
 				c += b = wcstoutf8(buff + c, utf_buff, utf_siz, &a, len - c);
+				if(c >= len) break;
 				if(!b) {
-					if(c >= len) break;
 					if((utf_siz - a) > block)
 						break; // unknown error
 					utf_buff = (char*)realloc(utf_buff, utf_siz = utf_siz + block);

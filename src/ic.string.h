@@ -24,6 +24,7 @@ namespace IC {
 		String(wchar_t *ca);
 		String(bool con);
 		String(int inte);
+		String(const char* cca);
 		String(const wchar_t* cca);
 		unsigned int length();
 		wchar_t* wc_str();
