@@ -44,8 +44,10 @@ namespace IC {
 		e___
 	}
 	String::~String() {
-		siz = len = 0;
 		free(buff);
+		if(utf_siz) free(utf_buff);
+		siz = len = 0;
+		utf_siz = utf_len = 0;
 	}
 	String::String(wchar_t *bu, unsigned int le, unsigned int si) {
 		buff = bu;
