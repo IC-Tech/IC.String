@@ -5,18 +5,18 @@
 #define IC_STR_BLOCK	512
 #endif
 
-namespace IC {
-	class String {
+namespace ic {
+	class string {
 	public:
-		String();
-		~String();
-		String(char *bu, unsigned int le, unsigned int si);
-		String(char c);
-		String(char *ca, unsigned int leng);
-		String(char *ca);
-		String(bool con);
-		String(int inte);
-		String(const char* cca);
+		string();
+		~string();
+		string(char *bu, unsigned int le, unsigned int si);
+		string(char c);
+		string(char *ca, unsigned int leng);
+		string(char *ca);
+		string(bool con);
+		string(int inte);
+		string(const char* cca);
 		unsigned int length();
 		char* c_str();
 		void* ptr();
@@ -25,25 +25,25 @@ namespace IC {
 		operator const char*();
 		bool operator!=(const char* str);
 		bool operator==(const char* str);
-		bool startWith(const char* cca);
-		bool startWith(char* ca);
-		bool startWith(String& str);
-		bool startWith(char* ca, unsigned int leng);
-		bool endWith(const char* cca);
-		bool endWith(char* ca);
-		bool endWith(String& str);
-		bool endWith(char* ca, unsigned int leng);
+		bool start_with(const char* cca);
+		bool start_with(char* ca);
+		bool start_with(string& str);
+		bool start_with(char* ca, unsigned int leng);
+		bool end_with(const char* cca);
+		bool end_with(char* ca);
+		bool end_with(string& str);
+		bool end_with(char* ca, unsigned int leng);
 		void remove(unsigned int pos);
 		void remove(unsigned int pos, unsigned int leng);
-		String substring(unsigned int pos, unsigned int leng);
-		int indexOf(char c, unsigned int pos = 0);
-		int indexOf(char *ca, unsigned int pos = 0);
-		int indexOf(const char *cca, unsigned int pos = 0);
-		int indexOf(char *ca, unsigned int leng, unsigned int pos);
-		int toInt(unsigned int pos = 0);
+		string substring(unsigned int pos, unsigned int leng);
+		int find(char c, unsigned int pos = 0);
+		int find(char *ca, unsigned int pos = 0);
+		int find(const char *cca, unsigned int pos = 0);
+		int find(char *ca, unsigned int leng, unsigned int pos);
+		int to_int(unsigned int pos = 0);
 
-		char charAt(unsigned int pos = 0);
-		void setChar(char c, unsigned int pos = 0);
+		char char_at(unsigned int pos = 0);
+		void set_char(char c, unsigned int pos = 0);
 		void add(char c);
 		void add(char* ca, unsigned int leng);
 		void add(char* ca);
@@ -54,12 +54,12 @@ namespace IC {
 		bool equal(char *ca);
 		bool equal(const char *ca, unsigned int leng);
 		bool equal(const char *ca);
-		String& operator+=(char c);
-		String& operator+=(char *ca);
-		String& operator+=(const char *cca);
-		String& operator+=(String &str);
-		String& operator=(const String& str);
-		String operator+(const String& str) const;
+		string& operator+=(char c);
+		string& operator+=(char *ca);
+		string& operator+=(const char *cca);
+		string& operator+=(string &str);
+		string& operator=(const string& str);
+		string operator+(const string& str) const;
 		void self_substring(unsigned int pos, unsigned int leng);
 		void pop_back();
 		void push_back(char c);

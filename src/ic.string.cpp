@@ -3,94 +3,94 @@
 #include <cstdio>
 #include "ic.string.h"
 
-namespace IC {
-	String::String(char *ca) : String(ca, strlen(ca)) {}
-	String::String(const char* cca) : String((char*)cca) {}
-	void String::add(char* ca) { return add(ca, strlen(ca)); }
-	void String::insert(unsigned int pos, char *ca) { return insert(pos, ca, strlen(ca)); }
-	int String::indexOf(char *ca, unsigned int pos) { return indexOf(ca, strlen(ca), pos); }
-	int String::indexOf(const char *cca, unsigned int pos) { return indexOf((char*)cca, strlen(cca), pos); }
-	void String::push_back(char c) { return add(c); }
-	void String::insert(unsigned int pos, const char *ca) { return insert(pos, (char*)ca); }
-	String::operator char*() { return c_str(); }
-	String::operator void*() { return ptr(); }
-	String::operator const char*() { return (const char*)c_str(); }
-	bool String::operator!=(const char* str) { return !equal(str); }
-	bool String::operator==(const char* str) { return equal(str); }
-	void *String::ptr() { return (void*)buff; }
-	bool String::startWith(const char* cca) { return startWith((char*)cca, strlen(cca)); }
-	bool String::startWith(char* ca) { return startWith(ca, strlen(ca)); }
-	bool String::startWith(String& str) { return startWith(str.buff, str.len); }
-	bool String::endWith(const char* cca) { return endWith((char*)cca, strlen(cca)); }
-	bool String::endWith(char* ca) { return endWith(ca, strlen(ca)); }
-	bool String::endWith(String& str) { return endWith(str.buff, str.len); }
+namespace ic {
+	string::string(char *ca) : string(ca, strlen(ca)) {}
+	string::string(const char* cca) : string((char*)cca) {}
+	void string::add(char* ca) { return add(ca, strlen(ca)); }
+	void string::insert(unsigned int pos, char *ca) { return insert(pos, ca, strlen(ca)); }
+	int string::find(char *ca, unsigned int pos) { return find(ca, strlen(ca), pos); }
+	int string::find(const char *cca, unsigned int pos) { return find((char*)cca, strlen(cca), pos); }
+	void string::push_back(char c) { return add(c); }
+	void string::insert(unsigned int pos, const char *ca) { return insert(pos, (char*)ca); }
+	string::operator char*() { return c_str(); }
+	string::operator void*() { return ptr(); }
+	string::operator const char*() { return (const char*)c_str(); }
+	bool string::operator!=(const char* str) { return !equal(str); }
+	bool string::operator==(const char* str) { return equal(str); }
+	void *string::ptr() { return (void*)buff; }
+	bool string::start_with(const char* cca) { return start_with((char*)cca, strlen(cca)); }
+	bool string::start_with(char* ca) { return start_with(ca, strlen(ca)); }
+	bool string::start_with(string& str) { return start_with(str.buff, str.len); }
+	bool string::end_with(const char* cca) { return end_with((char*)cca, strlen(cca)); }
+	bool string::end_with(char* ca) { return end_with(ca, strlen(ca)); }
+	bool string::end_with(string& str) { return end_with(str.buff, str.len); }
 	#define e___ buff[len] = 0;
 
-	String::String() {
+	string::string() {
 		len = 0;
 		buff = (char*)malloc(siz = block);
 		e___
 	}
-	String::~String() {
+	string::~string() {
 		siz = len = 0;
 		free(buff);
 	}
-	String::String(char *bu, unsigned int le, unsigned int si) {
+	string::string(char *bu, unsigned int le, unsigned int si) {
 		buff = bu;
 		len = le;
 		siz = si;
 	}
-	String::String(char* ca, unsigned int leng) {
+	string::string(char* ca, unsigned int leng) {
 		len = leng;
 		buff = (char*)malloc(siz = len + block);
 		memcpy(buff, ca, len);
 		e___
 	}
-	String::String(bool con) {
+	string::string(bool con) {
 		buff = (char*)malloc(siz = 5 + block);
 		if(con == true) memcpy(buff, "true", len = 4);
 		else memcpy(buff, "false", len = 5);
 		e___
 	}
-	String::String(char c) {
+	string::string(char c) {
 		buff = (char*)malloc(siz = block);
 		buff[0] = c;
 		buff[len = 1] = 0;
 	}
-	String::String(int inte) {
+	string::string(int inte) {
 		buff = (char*)malloc(siz = block);
 		len = sprintf(buff, "%d", inte);
 		e___
 	}
-	unsigned int String::length() {
+	unsigned int string::length() {
 		return len;
 	}
-	char* String::c_str() {
+	char* string::c_str() {
 		//buff[len] = 0;
 		return buff;
 	}
-	void String::add(char c) {
+	void string::add(char c) {
 		if(len >= siz) resize_(siz + 1 + block);
 		buff[len++] = c;
 		e___
 	}
-	bool String::startWith(char *ca, unsigned int leng) {
+	bool string::start_with(char *ca, unsigned int leng) {
 		if(len < leng) return false;
 		return memcmp(buff, ca, leng) == 0;
 	}
-	bool String::endWith(char *ca, unsigned int leng) {
+	bool string::end_with(char *ca, unsigned int leng) {
 		if(len < leng) return false;
 		for(int i=leng - 1, s = len - leng; i >= 0; i--) if(buff[s + i] != ca[i]) return false;
 		return true;
 	}
-	void String::remove(unsigned int pos) {
+	void string::remove(unsigned int pos) {
 		if(pos >= len) return;
 		buff[len = pos] = 0;
 		#ifndef NO_IC_STR_REDUCE
 		reduce();
 		#endif
 	}
-	void String::remove(unsigned int pos, unsigned int leng) {
+	void string::remove(unsigned int pos, unsigned int leng) {
 		if(!len || pos >= len) return;
 		unsigned int e = pos + leng;
 		if(e >= len) return remove(pos);
@@ -101,35 +101,35 @@ namespace IC {
 		reduce();
 		#endif
 	}
-	String String::substring(unsigned int pos, unsigned int leng) {
-		if(!len || !leng || pos >= len) return String();
+	string string::substring(unsigned int pos, unsigned int leng) {
+		if(!len || !leng || pos >= len) return string();
 		unsigned int s = leng + block;
 		char *b = (char *)malloc(s);
 		if((pos + leng) > len) leng = len - pos;
 		memcpy(b, buff + pos, leng);
-		return String(b, leng, s);
+		return string(b, leng, s);
 	}
-	int String::indexOf(char c, unsigned int pos) {
+	int string::find(char c, unsigned int pos) {
 		while(pos < len) {
 			if(buff[pos] == c) return pos;
 			pos++;
 		}
 		return -1;
 	}
-	int String::toInt(unsigned int pos) {
+	int string::to_int(unsigned int pos) {
 		return atoi(buff + pos);
 	}
 
 
 
-	unsigned int String::size() {
+	unsigned int string::size() {
 		return siz;
 	}
-	void String::resize_(unsigned int s) {
+	void string::resize_(unsigned int s) {
 		buff = (char*)realloc(buff, siz = s);
 		if(len > s) len = s;
 	}
-	void String::self_substring(unsigned int pos, unsigned int leng) {
+	void string::self_substring(unsigned int pos, unsigned int leng) {
 		if(!len || !leng || pos >= len) return;
 		if((pos + leng) > len) len = leng = len - pos;
 		else len = leng;
@@ -139,26 +139,26 @@ namespace IC {
 		reduce();
 		#endif
 	}
-	void String::pop_back() {
+	void string::pop_back() {
 		if(len) buff[--len] = 0;
 		#ifndef NO_IC_STR_REDUCE
 		reduce();
 		#endif
 	}
-	void String::clear() {
+	void string::clear() {
 		buff[len = 0] = 0;
 		#ifndef NO_IC_STR_REDUCE
 		reduce();
 		#endif
 	}
-	void String::insert(unsigned int pos, char c) {
+	void string::insert(unsigned int pos, char c) {
 		if(!len || pos >= (len -1)) return add(c);
 		if(len >= siz) resize_(siz + 1 + block);
 		memcpy(buff + pos + 1, buff + pos, len - pos);
 		buff[pos] = c;
 		buff[len++] = 0;
 	}
-	void String::insert(unsigned int pos, char *ca, unsigned int leng) {
+	void string::insert(unsigned int pos, char *ca, unsigned int leng) {
 		if(!leng) return;
 		if(!len || pos >= (len -1)) return add(ca);
 		if((len + leng) >= siz) resize_(siz + leng + block);
@@ -167,71 +167,71 @@ namespace IC {
 		len += leng;
 		e___
 	}
-	bool String::equal(char *ca, unsigned int leng) {
+	bool string::equal(char *ca, unsigned int leng) {
 		if(leng != len) return true;
 		return memcmp(ca, buff, len) == 0;
 	}
-	bool String::equal(char *ca) {
+	bool string::equal(char *ca) {
 		return equal(ca, strlen(ca));
 	}
-	bool String::equal(const char *ca) {
+	bool string::equal(const char *ca) {
 		return equal((char*)ca);
 	}
-	bool String::equal(const char *ca, unsigned int leng) {
+	bool string::equal(const char *ca, unsigned int leng) {
 		return equal((char*)ca, leng);
 	}
 	#ifndef NO_IC_STR_REDUCE
-	void String::reduce() {
+	void string::reduce() {
 		if(!auto_size_reduce) return;
 		if(siz - len < (block * 2)) return;
 		buff = (char*)realloc(buff, siz = len + block * 2);
 	}
 	#endif
-	void String::resize(unsigned int s) {
+	void string::resize(unsigned int s) {
 		if(siz <= s) resize_(s + block);
 		buff[len = s] = 0;
 		#ifndef NO_IC_STR_REDUCE
 		reduce();
 		#endif
 	}
-	char String::charAt(unsigned int pos) {
+	char string::char_at(unsigned int pos) {
 		return len <= pos ? 0 : buff[pos];
 	}
-	void String::setChar(char c, unsigned int pos) {
+	void string::set_char(char c, unsigned int pos) {
 		if(len > pos) buff[pos] = c;
 	}
 
-	void String::add(char* ca, unsigned int leng) {
+	void string::add(char* ca, unsigned int leng) {
 		if(!leng) return;
 		if((len + leng) >= siz) resize_(siz + leng + block);
 		memcpy(buff + len, ca, leng);
 		len += leng;
 		e___
 	}
-	String& String::operator+=(char c) {
+	string& string::operator+=(char c) {
 		add(c);
 		return *this;
 	}
-	String& String::operator+=(char *ca) {
+	string& string::operator+=(char *ca) {
 		add(ca);
 		return *this;
 	}
-	String& String::operator+=(const char *cca) {
+	string& string::operator+=(const char *cca) {
 		add((char*)cca);
 		return *this;
 	}
-	String& String::operator+=(String &str) {
+	string& string::operator+=(string &str) {
 		add(str.buff, str.len);
 		return *this;
 	}
-	String String::operator+(const String& str) const {
+	string string::operator+(const string& str) const {
 		unsigned int l = len + str.len, s;
 		char *b = (char *)malloc(s = l + IC_STR_BLOCK);
 		memcpy(b, buff, len);
 		memcpy(b + len, str.buff, str.len);
-		return String(b, l, s);
+		return string(b, l, s);
 	}
-	String& String::operator=(const String& str) {
+	string& string::operator=(const string& str) {
 		bool t;
 		if((t = str.len >= siz)) resize_(str.len + block);
 		memcpy(buff, str.buff, len = str.len);
@@ -240,7 +240,7 @@ namespace IC {
 		#endif
 		return *this;
 	}
-	int String::indexOf(char *ca, unsigned int leng, unsigned int pos) {
+	int string::find(char *ca, unsigned int leng, unsigned int pos) {
 		if(!len || len < leng) return -1;
 		if(len == leng) return equal(ca, leng);
 		unsigned int p = pos-1, i = 0;
