@@ -35,7 +35,7 @@ size_t wcstoutf8(wchar_t *str, char *dst, size_t max, size_t *pos, size_t len) {
 	*pos = dp;
 	return sp;
 }
-size_t utf8towcs(char *str, wchar_t *dst, size_t max, size_t *pos, ic::utf8fix f, size_t len) {
+size_t utf8towcs(char *str, wchar_t *dst, size_t max, size_t *pos, ic::utf_fix f, size_t len) {
 	size_t _p = 0;
 	if(pos == NULL) pos = &_p;
 	size_t sp = 0, dp = *pos;
