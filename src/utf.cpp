@@ -5,7 +5,8 @@ size_t ic::wcs_to_utf8(const wchar_t *str, char *dst, size_t max, size_t *pos, s
 	wchar_t c;
 	char *ds = dst, *de = ds + max;
 	char l = len != (size_t)-1; // length mode or null-terminated mode
-	while(((l && str < se) || (!l && *str)) && (dst < de)) {
+	while((l && str < se) || (!l && *str)) {
+		if(dst >= de) goto err;
 		fa = str;
 		c = *str;
 		if(c < 0x0080) *dst++ = (char)c;
@@ -43,7 +44,8 @@ size_t ic::utf8_to_wcs(const char *str, wchar_t *dst, size_t max, size_t *pos, e
 	wchar_t *ds = dst, *de = ds + max;
 	char l = len != (size_t)-1; // length mode or null-terminated mode
 	unsigned char d = 0, e = 0;
-	while(((l && str < se) || (!l && *str)) && (dst < de)) {
+	while((l && str < se) || (!l && *str)) {
+		if(dst >= de) goto err;
 		fa = str;
 		c = *str;
 		if((c & 0xf8) == 0xf0) {
@@ -99,7 +101,8 @@ size_t ic::wcs_to_utf16(const wchar_t *str, char16_t *dst, size_t max, size_t *p
 	wchar_t c;
 	char16_t *ds = dst, *de = ds + max;
 	char l = len != (size_t)-1; // length mode or null-terminated mode
-	while(((l && str < se) || (!l && *str)) && (dst < de)) {
+	while((l && str < se) || (!l && *str)) {
+		if(dst >= de) goto err;
 		fa = str;
 		c = *str;
 		if(c < 0x10000) *dst++ = c; // I won't block U+D800 to U+DFFF but they are reserved as surrogates; so this could provide corrupted output
@@ -123,7 +126,8 @@ size_t ic::utf16_to_wcs(const char16_t *str, wchar_t *dst, size_t max, size_t *p
 	char16_t c;
 	wchar_t *ds = dst, *de = ds + max;
 	char l = len != (size_t)-1; // length mode or null-terminated mode
-	while(((l && str < se) || (!l && *str)) && (dst < de)) {
+	while((l && str < se) || (!l && *str)) {
+		if(dst >= de) goto err;
 		fa = str;
 		c = *str++;
 		if((c & 0xF800) != 0xD800) {
@@ -152,7 +156,8 @@ size_t ic::utf8_to_utf16(const char *str, char16_t *dst, size_t max, size_t *pos
 	char l = len != (size_t)-1; // length mode or null-terminated mode
 	unsigned char d = 0, e = 0;
 	wchar_t w = 0;
-	while(((l && str < se) || (!l && *str)) && (dst < de)) {
+	while((l && str < se) || (!l && *str)) {
+		if(dst >= de) goto err;
 		fa = str;
 		c = *str;
 		if((c & 0xf8) == 0xf0) {
@@ -218,7 +223,8 @@ size_t ic::utf16_to_utf8(const char16_t *str, char *dst, size_t max, size_t *pos
 	char l = len != (size_t)-1; // length mode or null-terminated mode
 	wchar_t w = 0;
 	unsigned char e = 0;
-	while(((l && str < se) || (!l && *str)) && (dst < de)) {
+	while((l && str < se) || (!l && *str)) {
+		if(dst >= de) goto err;
 		fa = str;
 		c = *str++;
 		if((c & 0xF800) != 0xD800) {

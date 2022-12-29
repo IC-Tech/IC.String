@@ -156,7 +156,6 @@ inline size_t cvt_utf(const char *str, wchar_t *dst, size_t max, size_t *pos, si
 inline size_t cvt_utf(const char *str, char16_t *dst, size_t max, size_t *pos, size_t len) { return utf8_to_utf16(str, dst, max, pos, replace, len); }
 ///@}
 
-#define CVT_BUFF_BLOCK 2048
 /**
  * @brief converts one encoding to other
  *
@@ -168,37 +167,43 @@ inline size_t cvt_utf(const char *str, char16_t *dst, size_t max, size_t *pos, s
  * @param str           input string
  * @param len           length of the input
  * @param[out] s_out    length of the output
+ * @param block_size    size of a memory allocation block
  * @tparam t_input      input format
  * @tparam t_output     output format
  * @exception std::runtime_error unable to convert the string.
  * @return encoded string
  */
 template <typename t_input, typename t_output>
-inline t_output *cvt_utf_simple(const t_input *str, size_t len = (size_t)-1, size_t *s_out=NULL) {
-	size_t s = CVT_BUFF_BLOCK;
+inline t_output *cvt_utf_simple(const t_input *str, size_t len = (size_t)-1, size_t *s_out=NULL, unsigned int block_size=2048) {
+	size_t s = block_size;
 
 	//t_output *dst = (t_output *)malloc(sizeof(t_output) * s);
 	t_output *dst = new t_output[s];
 
-	size_t a = 0, b = 0, c = 0, d, l = len;
+	size_t t_src = 0, t_dst = 0, p_src = 0, l = len;
 	while(1) {
 		errno = 0;
-		d += a = cvt_utf(str + b, dst + c, s - c, &c, l);
-		if(errno == 0) break;
+		t_dst += cvt_utf(str + t_src, dst + t_dst, s - t_dst, &p_src, l);
+		t_src += p_src;
+		if(l != (size_t)-1) l -= p_src;
+
+		if(errno == 0) {
+			if(l != (size_t)-1 && l) throw new std::runtime_error("unknown error occurred");
+			break;
+		}
 		if(errno != ENOBUFS) throw new std::runtime_error("unable to convert the string");
 
-		if(l != (size_t)-1) l -= c;
-
 		// this is why I love C more
-		//s += CVT_BUFF_BLOCK;
+		//s += block_size;
 		//dst = (t_output *)realloc(dst, sizeof(t_output) * s);
 
-		t_output *new_dst = new t_output[s + CVT_BUFF_BLOCK];
+		t_output *new_dst = new t_output[s + block_size];
 		std::copy(dst, dst + s, new_dst);
-		s += CVT_BUFF_BLOCK;
+		s += block_size;
+		delete[] dst;
 		dst = new_dst;
 	}
-	if(s_out != NULL) *s_out = d;
+	if(s_out != NULL) *s_out = t_dst;
 	return dst;
 }
 
