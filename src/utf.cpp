@@ -64,7 +64,7 @@ unsigned char _proto_utf8_dec(const char *&str, const char *se, wchar_t &w, enum
 	if(f == ic::replace) w = 0xfffd;
 	else if(f == ic::copy) w = c; // not finished
 	else if(f == ic::stop) return _RET_EILSEQ;
-	str += d;
+	str += d ? d : 1;
 	return _RET_OK;
 }
 /**
